@@ -1,0 +1,144 @@
+.navbar{
+-webkit-box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
+-moz-box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
+box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
+}
+
+.container-fluid{
+	padding: 0 100px;
+}
+
+.navbar a{
+	color: #6b6bff;
+}
+
+.card-table{
+	margin: 20px 100px;
+	border:none;
+}
+
+.dataframe{
+	border:none;
+	
+}
+thead {
+  background-color: #6b6bff;
+  color: white;
+	height: 20px;
+	
+}
+
+td {
+	word-wrap: break-word;
+}
+
+thead{
+	text-align: center !important;
+}
+
+.dataframe tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+.dataframe tbody tr:nth-child(even) {
+  background-color: #eee;
+}
+
+.title-data{
+	color: #6b6bff;
+}
+
+
+.image_sentiment{
+	height:75px !important;
+	width: 75px !important;
+}
+
+.row-content{
+	justify-content: space-between;
+	padding: 20px 20px;
+	height: 370px;
+	background-color: white;
+	-webkit-box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
+	-moz-box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
+	box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
+	border-radius: 10px;
+
+}
+
+.input_form{
+	margin-top: 10px;
+	background-color:#ededff;
+	border: none;
+}
+
+.btn-custom{
+	background: #6b6bff;
+	color: white;
+	font-weight: 500;
+}
+
+.col-form, .col-splitData{
+	border-right: 1px solid rgb(234, 234, 234);
+}
+
+.grey-text{
+	color: rgb(195, 195, 195);
+	text-align: center;
+}
+
+.result-container{
+	text-align: center;
+	align-items: center;
+}
+
+.dataTrainChart{
+	/* height: 300px !important;
+	width: 450px !important; */
+}
+
+
+.form-preprocessing, .card-weighting, .card-svm{
+	border-radius: 10px;
+	text-align: center;
+	margin: 20px 100px;
+	background-color: #f1f1fe;
+	padding: 20px 0;
+}
+
+
+.card-split-test, .card-split-train{
+	border: none;
+	padding: 10px 10px;
+	margin-top: 20px;
+	height: 100px;
+}
+
+.card-split-train{
+ background-color: rgb(202, 255, 230);
+}
+.card-split-test{
+background-color: rgb(233, 255, 201);
+}
+
+.card-split-test p, .card-split-train p{
+	font-size: 30px;
+	font-weight: bold;
+}
+
+
+.row-weighting{
+	justify-content: space-between;
+	margin-top: 30px;
+	height: 370px;
+}
+
+
+.card-svm-result{
+	margin: 20px 100px;
+	border:none;
+}
+
+.image_plot_svm{
+	
+}
