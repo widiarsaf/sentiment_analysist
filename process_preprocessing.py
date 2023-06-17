@@ -29,10 +29,7 @@ def cleaningText(text):
     text = text.translate(str.maketrans('', '', string.punctuation))
     # remove characters space from both left and right text
     text = text.strip(' ')
-    return text
-
-
-def remove_non_ascii(text):
+    #remove non-ascii characters
     ascii_chars = set(string.printable)
     return ''.join(
         filter(lambda x: x in ascii_chars, text)
@@ -101,7 +98,6 @@ def removeUnusedString(location):
 def prepocessingText(text):
     text['sentiments'] = text.apply(cleaningText)
     text['sentiments'] = text['sentiments'].apply(casefoldingText)
-    text['sentiments'] = text['sentiments'].apply(remove_non_ascii)
     text['sentiments'] = text['sentiments'].apply(tokenizingText)
     text['sentiments'] = text['sentiments'].apply(filteringText)
     # text['sentiments'] = text['sentiments'].apply(stemmingText)

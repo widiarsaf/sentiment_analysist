@@ -7,6 +7,8 @@ import warnings
 import random
 from sklearn.svm import SVC
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 warnings.filterwarnings('ignore')
 
 # Possible parameter values
@@ -77,7 +79,7 @@ def evaluate(individual):
     return accuracy,
 
 
-def GA():
+def GA(population, crossover, mutation, generation):
   # Maximise the fitness function value
   creator.create("FitnessMax", base.Fitness, weights=(1.0,))
   creator.create("Individual", list, fitness=creator.FitnessMax)
@@ -104,10 +106,10 @@ def GA():
   toolbox.register("select", tools.selTournament, tournsize=2)
   toolbox.register("evaluate", evaluate)
 
-  population_size = 100
-  crossover_probability = 0.1
-  mutation_probability = 0.01
-  number_of_generations = 10
+  population_size = population
+  crossover_probability = crossover
+  mutation_probability = mutation
+  number_of_generations = generation
 
   pop = toolbox.population(n=population_size)
   hof = tools.ParetoFront()
@@ -124,25 +126,46 @@ def GA():
                                  verbose=True)
 
   best_parameters = hof[0]  # save the optimal set of parameters
-#   print("================================")
-#   print("C Value             : ", best_parameters[0])
-#   print("Kernel Value        : ", best_parameters[1])
-#   print("Degree Value        : ", best_parameters[2])
-#   print("Gamma Value         : ", best_parameters[3])
-#   print("Coef0 Value         : ", best_parameters[4])
-#   print("Max_Iter Value      : ", best_parameters[5])
-#   print("================================")
-#   print()
-
   global logbook
   logbook = log
   return log, best_parameters
 
 
-def geneticAlgorithmProcess(train_x_arr_param, test_x_arr_param, train_Y_param, test_Y_param):
+
+def generatePlot():
+    gen = logbook.select("gen")
+    max_ = logbook.select("max")
+    avg = logbook.select("avg")
+    min_ = logbook.select("min")
+
+    evolution = pd.DataFrame({'Generation': gen,
+                            'Max Accuracy': max_,
+                            'Average': avg,
+                            'Min Accuracy': min_})
+
+    plt.title('Parameter Optimisation')
+    plot_ga = plt.plot(evolution['Generation'], evolution['Min Accuracy'], 'b', color = 'C1',
+             label = 'Min')
+    plot_ga = plt.plot(evolution['Generation'], evolution['Average'], 'b', color='C2',
+             label = 'Average')
+    plot_ga = plt.plot(evolution['Generation'], evolution['Max Accuracy'], 'b', color='C3',
+            label='Max')
+
+
+    plt.legend(loc='lower right')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Generation')
+
+    return plot_ga
+
+
+
+def geneticAlgorithmProcess(train_x_arr_param, test_x_arr_param, train_Y_param, test_Y_param, population, crossover, mutation, generation):
     global train_x_arr, train_x_arr, test_x_arr, train_Y, test_Y
     train_x_arr = train_x_arr_param
     test_x_arr = test_x_arr_param
     train_Y = train_Y_param
     test_Y = test_Y_param
-    return GA()
+    log, best_param = GA(population, crossover, mutation, generation)
+    plot_ga = generatePlot()
+    return log, best_param, plot_ga

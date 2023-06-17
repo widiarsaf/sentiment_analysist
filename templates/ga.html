@@ -9,7 +9,17 @@
 		integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style1.css')}}" />
 	<title>Document</title>
-
+			<style>
+				.dataframe td:nth-child(4), td:nth-child(5) {
+					width: 30%;
+				}
+				.dataframe td:nth-child(6), td:nth-child(7) {
+					width: 10%;
+				}
+				.dataframe td{
+					text-align: center;
+				}
+			</style>
 </head>
 
 <body>
@@ -51,24 +61,42 @@
 	<div>
 		<div class="card-svm">
 			<h3 class="title-data mt-3 mb-3">Genetic Algorihtm Process</h3>
-			<p>Perform Multiclass Support Vector Machine (SVM) model for sentiment classification, which categorizes
-				sentiments
-				into Positive,
-				Negative, and Neutral classes.</p>
+			<p>Perform Multiclass Support Vector Machine (SVM) model for sentiment classification, which categorizes sentiments into Positive,Negative, and Neutral classes.</p>
+		</div>
+		<div class = "card form-ga">
 			<form action="{{url_for('geneticAlgorithm')}}" method="post">
-				<div class="form-group my-2">
-					<br>
-					<input id="" cols="65" rows="7" name="geneticAlgorithm" value="split" class="input_form" type=hidden></input>
-					<!-- <input class="form-control input_form" id="sentiment" type="text" name="sentiment" value=""> -->
+				<div class="row">
+					<div class="col">
+						<div class="form-group my-2">
+							<label>Enter Population Size</label>
+							<input type="number"  class = "form-control" cols="65" rows="7" name="population" required></input>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group my-2">
+							<label>Enter Crossover Probability (0.0-1.0)</label>
+							<input type="number" step="0.01" class = "form-control" cols="65" rows="7" name="crossover" required></input>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group my-2">
+							<label>Enter Mutation Probability (0.0-1.0)</label>
+							<input type="number" step="0.01" class = "form-control" cols="65" rows="7" name="mutation" required></input>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-group my-2">
+							<label>Enter Number of Generation</label>
+							<input type="number" class = "form-control" cols="65" rows="7" name="generation" required></input>
+						</div>
+					</div>
 				</div>
-
+				
+			
 				<input type="submit" value="geneticAlgorithm" class="btn btn-custom"></input>
 			</form>
-
 		</div>
-		<div>
-			Finish? {{done}}
-		</div>
+			
 		<div class="row">
 			<div class="col card-svm-result">
 				<div class="mt-5">
@@ -78,22 +106,21 @@
 					{%endfor %}
 				</div>
 				<div>
-					<p style="color: rgb(164, 164, 164); font-size: 20px;">Best Params:</p>
-					<h4>{{best_param}}</h4>
+					<h4 style="color: rgb(164, 164, 164); font-size: 20px;" class = "mt-5">Best Params:</h4>
+					<p>C Value 				: {{c}}</p>
+					<p>Kernel Value 		: {{kernel}}</p>
+					<p>Degree Valuee 	: {{degree}}</p>
+					<p>Gamma Value 		: {{gamma}}</p>
+					<p>Coef0 Value 		: {{coef0}}</p>
+					<p>Max_Iter Value 	: {{max_iter}}</p>
+
 				</div>
-				
-		
 			</div>
 			<div class="col">
-				<img src="data:image/png;base64, {{ images }}" alt="" class="image_plot_svm">
+				<img src="data:image/png;base64, {{ images }}" alt="" class="">
 			</div>
 		</div>
 	</div>
-
-
-
-
-
 
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
 		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"

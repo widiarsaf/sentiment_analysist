@@ -83,7 +83,7 @@ model = pickle.load(open("model.pkl", "rb"))
 # Dataset
 dataset = pd.read_csv("data_sentiment.csv")
 datasets = dataset[['datetime', 'username', 'content', 'location', 'label']]
-election_sentiment = pd.read_csv("new_sa_clean.csv")
+election_sentiment = pd.read_csv("sentiment_clean3.csv")
 
 # Image Folder
 imageFolder = os.path.join('static', 'images')
@@ -153,11 +153,20 @@ def gaPage():
 def predict():
     data = request.form["sentiment"]
     input_data = [data]
-    tfidf_vect_data2 = TfidfVectorizer(max_features=5000)
-    tfidf_vect_data2.fit(election_sentiment['text_clean'])
+    tfidf_vect_data2 = TfidfVectorizer(analyzer='word', binary=False, decode_error='strict', encoding='utf-8',
+                                       lowercase=True, max_df=1.0, max_features=30000, min_df=5,
+                                       ngram_range=(1, 1), norm='l2',
+                                       strip_accents='unicode', sublinear_tf=False,
+                                       token_pattern='\\w{1,}', tokenizer=None, use_idf=True,
+                                       vocabulary=None)
+    tfidf_vect_data2.fit(election_sentiment['sentiment'])
     vectorized_input = tfidf_vect_data2.transform(input_data)
     new_test_x2 = vectorized_input.toarray()
     prediction = model.predict(new_test_x2)
+    predict_proba = model.predict_proba(new_test_x2)
+    positive = predict_proba[0][2]
+    neutral = predict_proba[0][1]
+    negative = predict_proba[0][0]
     predict_text = ''
     images = "no_pict"
     data2 = request.form.get('sentiment')
@@ -174,7 +183,9 @@ def predict():
         predict_text = "Negative"
         images = os.path.join(app.config['UPLOAD_FOLDER'], 'Negative.png')
 
-    return render_template("index.html", sentiment_image=images, inputData=data2, prediction_text="{}".format(predict_text))
+    return render_template("index.html", sentiment_image=images, inputData=data2, prediction_text="{}".format(predict_text),
+        positive = positive, neutral = neutral, negative = negative
+        )
 
 
 # Preprocessing
@@ -257,10 +268,32 @@ def svm_process():
 @app.route('/geneticAlgorithm', methods=["POST"])
 def geneticAlgorithm():
     warnings.filterwarnings('ignore')
-    log, best_param = geneticAlgorithmProcess(train_x_arr, test_x_arr, train_Y, test_Y)
+
+    #get data
+    population = int(request.form["population"])
+    crossover = float(request.form["crossover"])
+    mutation = float(request.form["mutation"])
+    generation = int(request.form["generation"])
+    log, best_param, plot_ga = geneticAlgorithmProcess(
+        train_x_arr, test_x_arr, train_Y, test_Y, population, crossover,mutation,generation)
     log_df = pd.DataFrame(log)
-    print(log_df)
-    return render_template('ga.html', done="Ok!", logs=[log_df.to_html()], titles=[''], best_param=best_param)
+   
+    c = best_param[0]
+    kernel = best_param[1]
+    degree = best_param[2]
+    gamma = best_param[3]
+    coef0 = best_param[4]
+    max_iter = best_param[5]
+    
+    #Plot
+    img = BytesIO()
+    plot_ga
+    plt.savefig(img, format='png')
+    plt.close()
+    img.seek(0)
+    plot_ga= base64.b64encode(img.getvalue()).decode('utf8')
+    return render_template('ga.html', done="Ok!", logs=[log_df.to_html()], titles=[''], best_param=best_param, 
+                           images=plot_ga, c=c, kernel=kernel, degree=degree, gamma=gamma, coef0=coef0, max_iter=max_iter)
 
 
 if __name__ == "__main__":

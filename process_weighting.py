@@ -32,5 +32,4 @@ def tf_idf(df_train, df_test, sentiment):
 
     train_shape = train_X_tfidf_data.shape
     test_shape = test_X_tfidf_data.shape
-    vocab = tfidf_vect_data.vocabulary_
     return test_x_arr, train_x_arr, train_shape, test_shape
