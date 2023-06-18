@@ -23,25 +23,26 @@
 			<div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link" aria-current="page" href="{{url_for('home')}}">Home</a>
+						<a class="nav-link" aria-current="page" href="{{url_for('home')}}" id="home">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('datasetPage')}}">Data</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('chart')}}">Chart</a>
+						<a class="nav-link" href="{{url_for('datasetPage')}}" id="data">Data</a>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-							data-bs-toggle="dropdown" aria-expanded="false">
+							data-bs-toggle="dropdown" aria-expanded="false" id="simulation">
 							Simulation
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<li><a class="dropdown-item" href="{{url_for('preprocessingPage')}}">Pre-Processing</a></li>
-							<li><a class="dropdown-item" href="{{url_for('weightingPage')}}">TF-IDF</a></li>
-							<li><a class="dropdown-item" href="{{url_for('svmPage')}}">SVM</a></li>
-							<li><a class="dropdown-item" href="{{url_for('gaPage')}}">Genetic Algorithm Process</a></li>
+							<li><a class="dropdown-item" href="{{url_for('preprocessingPage')}}" id="preprocessing">Pre-Processing</a>
+							</li>
+							<li><a class="dropdown-item" href="{{url_for('weightingPage')}}" id="weighting">TF-IDF</a></li>
+							<li><a class="dropdown-item" href="{{url_for('svmPage')}}" id="svm">SVM</a></li>
+							<li><a class="dropdown-item" href="{{url_for('gaPage')}}" id="ga">Genetic Algorithm Process</a></li>
 						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{url_for('chart')}}" id="chart">Chart</a>
 					</li>
 				</ul>
 			</div>
@@ -68,20 +69,20 @@
 							<!-- <input class="form-control input_form" id="sentiment" type="text" name="sentiment" value=""> -->
 						</div>
 					
-						<input type="submit" value="Split Data" class="btn btn-custom"></input>
+						<input type="submit" value="Split Data" class="btn btn-custom" id = button-split></input>
 					</form></center>
 					<div class="row">
 						<div class="col">
 							<div class="card card-split-train">
 									Total Train data : 
-									<p>{{total_train}}</p>
+									<p id = "train-data">{{total_train}}</p>
 
 							</div>
 						</div>
 						<div class="col">
 								<div class="card card-split-test">
 									Total Test data :
-									<p>{{total_test}}</p>
+									<p id = "test-data">{{total_test}}</p>
 								
 								</div>
 						</div>
@@ -100,20 +101,20 @@
 						<!-- <input class="form-control input_form" id="sentiment" type="text" name="sentiment" value=""> -->
 					</div>
 				
-					<input type="submit" value="Weighting Term" class="btn btn-custom"></input>
+					<input type="submit" value="Weighting Term" class="btn btn-custom" id = "button-weighting"></input>
 				</form></center>
 				<div class="row">
 					<div class="col">
 						<div class="card card-split-train">
 							Train shape :
-							<p>{{train_shape}}</p>
+							<p id = "train-shape">{{train_shape}}</p>
 				
 						</div>
 					</div>
 					<div class="col">
 						<div class="card card-split-test">
 							Test shape :
-							<p>{{test_shape}}</p>
+							<p id = "test-shape">{{test_shape}}</p>
 				
 						</div>
 					</div>

@@ -3,8 +3,7 @@ from process_geneticAlgorithm import geneticAlgorithmProcess
 from process_svm import svmProcess
 from process_preprocessing import prepocessingText, preprocessingLocation
 from process_weighting import splitDataset, tf_idf
-from sklearn.metrics import confusion_matrix
-from mlxtend.plotting import plot_confusion_matrix
+
 from sklearn.model_selection import GridSearchCV
 from wordcloud import WordCloud
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
@@ -36,13 +35,7 @@ import numpy as np
 import pandas as pd
 import csv
 import matplotlib.pyplot as plt
-from sklearn import model_selection
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import svm
-from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import roc_auc_score, auc
 from io import BytesIO
 import base64
 import matplotlib
@@ -104,28 +97,25 @@ def datasetPage():
 
 @app.route('/chart')
 def chart():
-    # data_train = pd.read_csv("df_train.csv")
-    # data_test = pd.read_csv("df_test.csv")
-    # # images_chart_actual = os.path.join(app.config['UPLOAD_FOLDER'], 'Positive.png')
-    # # images_chart_predict = os.path.join(app.config['UPLOAD_FOLDER'], 'Positive.png')
+    data_train = pd.read_csv("df_train.csv")
+    data_test = pd.read_csv("df_test.csv")
 
-    # labels = ['Positive', 'Neutral', 'Negative']
+    labels = ['Positive', 'Neutral', 'Negative']
 
-    # pos_train = len(data_train[data_train["label"] == "positive"])
-    # neu_train = len(data_train[data_train["label"] == "neutral"])
-    # neg_train = len(data_train[data_train["label"] == "negative"])
+    pos_train = len(data_train[data_train["labels"] == "positive"])
+    neu_train = len(data_train[data_train["labels"] == "neutral"])
+    neg_train = len(data_train[data_train["labels"] == "negative"])
 
-    # category_train = [pos_train, neu_train, neg_train]
+    category_train = [pos_train, neu_train, neg_train]
 
-    # labels_json = json.dumps(labels)
-    # category_json = json.dumps(category_train)
+    labels_json = json.dumps(labels)
+    category_json = json.dumps(category_train)
 
-    # data_train_all = [labels_json, category_json]
-    # data_train_json = json.dumps(data_train_all)
-    # # print(data_train_all)
+    data_train_all = [labels_json, category_json]
+    data_train_json = json.dumps(data_train_all)
+    # print(data_train_all)
 
-    # print(data)
-    return render_template('chart.html')
+    return render_template('chart.html', data_train_all=data_train_json)
 
 
 @app.route('/preprocessingPage')

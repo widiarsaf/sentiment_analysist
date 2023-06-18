@@ -29,25 +29,26 @@
 			<div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link" aria-current="page" href="{{url_for('home')}}">Home</a>
+						<a class="nav-link" aria-current="page" href="{{url_for('home')}}" id="home">Home</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('datasetPage')}}">Data</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="{{url_for('chart')}}">Chart</a>
+						<a class="nav-link" href="{{url_for('datasetPage')}}" id="data">Data</a>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-							data-bs-toggle="dropdown" aria-expanded="false">
+							data-bs-toggle="dropdown" aria-expanded="false" id="simulation">
 							Simulation
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<li><a class="dropdown-item" href="{{url_for('preprocessingPage')}}">Pre-Processing</a></li>
-							<li><a class="dropdown-item" href="{{url_for('weightingPage')}}">TF-IDF</a></li>
-							<li><a class="dropdown-item" href="{{url_for('svmPage')}}">SVM</a></li>
-							<li><a class="dropdown-item" href="{{url_for('gaPage')}}">Genetic Algorithm Process</a></li>
+							<li><a class="dropdown-item" href="{{url_for('preprocessingPage')}}" id="preprocessing">Pre-Processing</a>
+							</li>
+							<li><a class="dropdown-item" href="{{url_for('weightingPage')}}" id="weighting">TF-IDF</a></li>
+							<li><a class="dropdown-item" href="{{url_for('svmPage')}}" id="svm">SVM</a></li>
+							<li><a class="dropdown-item" href="{{url_for('gaPage')}}" id="ga">Genetic Algorithm Process</a></li>
 						</ul>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{url_for('chart')}}" id="chart">Chart</a>
 					</li>
 				</ul>
 			</div>
@@ -65,7 +66,7 @@
 				<!-- <input class="form-control input_form" id="sentiment" type="text" name="sentiment" value=""> -->
 			</div>
 
-			<input type="submit" value="SVM process" class="btn btn-custom"></input>
+			<input type="submit" value="SVM process" class="btn btn-custom" id = "button-svm"></input>
 		</form>
 
 	</div>
@@ -73,8 +74,12 @@
 	<div class="row">
 		<div class="col card-svm-result">
 			<div>
+				{% if accuracy != None: %}
 				<p style="color: rgb(164, 164, 164); font-size: 20px;">Accuracy:</p>
-				<h4>{{accuracy}}</h4>
+				<h4 class = "accuracy_result_text">{{accuracy}}</h4>
+				{% else %}
+				<h4>Accuracy not found</h4>
+				{% endif %}
 			</div>
 			<div class="mt-5">
 				{% for report in summarized_reports %}
@@ -85,7 +90,11 @@
 
 		</div>
 		<div class="col">
+			{% if images != None: %}
 			<img src="data:image/png;base64, {{ images }}" alt="" class="image_plot_svm">
+			{% else %}
+			<p>No Pictures</p>
+			{% endif %}
 		</div>
 	</div>
 
