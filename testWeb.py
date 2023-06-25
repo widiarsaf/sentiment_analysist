@@ -19,79 +19,79 @@ class testWeb(unittest.TestCase):
 		self.driver = webdriver.Chrome(service=service)
 		self.driver.get("http://127.0.0.1:5000/")
 
-	# def test_prediction(self):
-	# 	try:
-	# 		input_element = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.NAME, "sentiment")))
-	# 		input_element.send_keys("1")
-	# 		button = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "button-predict")))
-	# 		button.click()
-	# 		WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.ID, "prediction_result"))).text
-	# 	except NoSuchElementException:
-	# 		print('Predictionion Test Failed')
+	def test_prediction(self):
+		try:
+			input_element = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.NAME, "sentiment")))
+			input_element.send_keys("1")
+			button = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "button-predict")))
+			button.click()
+			WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.ID, "prediction_result"))).text
+		except NoSuchElementException:
+			print('Predictionion Test Failed')
 			
-	# 	print('Predictionion Test Done ✓')
-	# 	time.sleep(3)
+		print('Predictionion Test Done ✓')
+		time.sleep(3)
 
 
-	# def test_view_dataset(self):
-	# 	try:
-	# 		navData = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "data")))
-	# 		navData.click()
-	# 		WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "dataframe")))
-	# 	except NoSuchElementException:
-	# 		print('View Dataset Test Failed')
+	def test_view_dataset(self):
+		try:
+			navData = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "data")))
+			navData.click()
+			WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, "dataframe")))
+		except NoSuchElementException:
+			print('View Dataset Test Failed')
 
-	# 	print('View Dataset Test Done ✓')
-	# 	time.sleep(3)
+		print('View Dataset Test Done ✓')
+		time.sleep(3)
 
-	# def test_preprocessing(self):
-	# 	try:
-	# 		navSimulation = WebDriverWait(self.driver, 10).until(
-	# 			EC.visibility_of_element_located((By.ID, "navbarDropdownMenuLink")))
-	# 		navSimulation.click()
-	# 		navPreprocessing = WebDriverWait(self.driver, 10).until(
-	# 			EC.visibility_of_element_located((By.ID, "preprocessing")))
-	# 		navPreprocessing.click()
-	# 		buttonPreprocessing = WebDriverWait(self.driver, 10).until(
-	# 			EC.visibility_of_element_located((By.ID, "button-preprocessing")))
-	# 		buttonPreprocessing.click()
-	# 		WebDriverWait(self.driver, 10).until(
-	# 			EC.visibility_of_element_located((By.CLASS_NAME, "dataframe")))
-	# 	except NoSuchElementException:
-	# 		print('Preprocessing Test Failed')
+	def test_preprocessing(self):
+		try:
+			navSimulation = WebDriverWait(self.driver, 10).until(
+				EC.visibility_of_element_located((By.ID, "navbarDropdownMenuLink")))
+			navSimulation.click()
+			navPreprocessing = WebDriverWait(self.driver, 10).until(
+				EC.visibility_of_element_located((By.ID, "preprocessing")))
+			navPreprocessing.click()
+			buttonPreprocessing = WebDriverWait(self.driver, 10).until(
+				EC.visibility_of_element_located((By.ID, "button-preprocessing")))
+			buttonPreprocessing.click()
+			WebDriverWait(self.driver, 10).until(
+				EC.visibility_of_element_located((By.CLASS_NAME, "dataframe")))
+		except NoSuchElementException:
+			print('Preprocessing Test Failed')
 
-	# 	print('Preprocessing Test Done ✓')
-	# 	time.sleep(3)
+		print('Preprocessing Test Done ✓')
+		time.sleep(3)
 
-	# def test_weighting(self):
-	# 	try:
-	# 		navSimulation = WebDriverWait(self.driver, 10).until(
-	# 			EC.visibility_of_element_located((By.ID, "navbarDropdownMenuLink")))
-	# 		navSimulation.click()
-	# 		navTfidf = WebDriverWait(self.driver, 10).until(
-	# 			EC.visibility_of_element_located((By.ID, "weighting")))
-	# 		navTfidf.click()
-	# 		buttonSplit = WebDriverWait(self.driver, 10).until(
-	# 			EC.visibility_of_element_located((By.ID, "button-split")))
-	# 		buttonSplit.click()
-	# 		WebDriverWait(self.driver, 20).until(
-	# 			EC.visibility_of_element_located((By.ID, "train-data"))).text
-	# 		WebDriverWait(self.driver, 20).until(
-	# 			EC.visibility_of_element_located((By.ID, "test-data"))).text
-	# 		buttonWeighting = WebDriverWait(self.driver, 10).until(
-	# 			EC.visibility_of_element_located((By.ID, "button-weighting")))
-	# 		buttonWeighting.click()
-	# 		WebDriverWait(self.driver, 20).until(
-	# 			EC.visibility_of_element_located((By.ID, "train-shape"))).text
-	# 		WebDriverWait(self.driver, 20).until(
-	# 			EC.visibility_of_element_located((By.ID, "test-shape"))).text
+	def test_weighting(self):
+		try:
+			navSimulation = WebDriverWait(self.driver, 10).until(
+				EC.visibility_of_element_located((By.ID, "navbarDropdownMenuLink")))
+			navSimulation.click()
+			navTfidf = WebDriverWait(self.driver, 10).until(
+				EC.visibility_of_element_located((By.ID, "weighting")))
+			navTfidf.click()
+			buttonSplit = WebDriverWait(self.driver, 10).until(
+				EC.visibility_of_element_located((By.ID, "button-split")))
+			buttonSplit.click()
+			WebDriverWait(self.driver, 20).until(
+				EC.visibility_of_element_located((By.ID, "train-data"))).text
+			WebDriverWait(self.driver, 20).until(
+				EC.visibility_of_element_located((By.ID, "test-data"))).text
+			buttonWeighting = WebDriverWait(self.driver, 10).until(
+				EC.visibility_of_element_located((By.ID, "button-weighting")))
+			buttonWeighting.click()
+			WebDriverWait(self.driver, 20).until(
+				EC.visibility_of_element_located((By.ID, "train-shape"))).text
+			WebDriverWait(self.driver, 20).until(
+				EC.visibility_of_element_located((By.ID, "test-shape"))).text
 
 			
-	# 	except NoSuchElementException:
-	# 		print('Weighting Using TF-IDF Test Failed')
+		except NoSuchElementException:
+			print('Weighting Using TF-IDF Test Failed')
 
-	# 	print('Weighting Using TF-IDF Test Done ✓')
-	# 	time.sleep(3)
+		print('Weighting Using TF-IDF Test Done ✓')
+		time.sleep(3)
 
 	def test_svm(self):
 		try:

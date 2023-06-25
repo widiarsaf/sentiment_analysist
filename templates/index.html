@@ -29,7 +29,7 @@
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
 							data-bs-toggle="dropdown" aria-expanded="false">
-							Simulation
+							GA-SVM Process
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<li><a class="dropdown-item" href="{{url_for('preprocessingPage')}}" id = "preprocessing">Pre-Processing</a></li>
@@ -57,7 +57,7 @@
 								<div class="form-group my-2">
 									<label for="email">Enter Sentiment</label>
 									<br>
-									<textarea id="" cols = "65" rows="7" name="sentiment" class="input_form" ></textarea>
+									<textarea id="" cols = "65" rows="7" name="sentiment" class="input_form" required></textarea>
 								</div>
 					
 								<input type="submit" value="Predict" class="btn btn-custom" id = "button-predict"></input>
@@ -79,9 +79,7 @@
 							<p>"{{inputData}}" is a <b id="prediction_result">{{prediction_text}} Sentiment</b></p>
 						</center>
 						<h5>Probability</h5>
-						<p>Positive <b>{{positive}}</b></p> 
-						<p>Neutral <b>{{neutral}}</b></p>
-						<p>Negative <b>{{negative}}</b></p>
+						<p>Positive <b>{{positive}} </b> | Neutral <b>{{neutral}} </b> | Negative <b>{{negative}}</b></p> 
 					{% endif %}
 					
 				</div>

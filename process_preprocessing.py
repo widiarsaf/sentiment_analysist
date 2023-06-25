@@ -109,3 +109,12 @@ def preprocessingLocation(location) :
     location['locations'] = location['locations'].apply(removeStringAfterSymbol)
     location['locations'] = location['locations'].apply(removeUnusedString)
     return location['locations']
+
+def preprocessingSentiment(text):
+    sentiment = cleaningText(text)
+    sentiment = casefoldingText(sentiment)
+    sentiment = tokenizingText(sentiment)
+    sentiment = filteringText(sentiment)
+    sentiment = stemmingText(sentiment)
+    sentiment = toSentence(sentiment)
+    return sentiment

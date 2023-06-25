@@ -57,7 +57,6 @@ thead{
 .row-content{
 	justify-content: space-between;
 	padding: 20px 20px;
-	height: 370px;
 	background-color: white;
 	-webkit-box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
 	-moz-box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
@@ -140,10 +139,41 @@ background-color: rgb(233, 255, 201);
 }
 
 .image_plot_svm{
-	
+	width: 70%;
 }
 
 .form-ga{
 	margin: 20px 100px;
 	border:none;
+}
+
+
+/* Chart */
+.ga-svm, .keyword, .location{
+	padding: 20px 20px;
+	background-color: white;
+	-webkit-box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
+	-moz-box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
+	box-shadow: 0px 5px 37px -8px rgba(189,189,255,0.89);
+	border-radius: 10px;
+}
+.col-chart{
+	align-items: center;
+	text-align: center;
+}
+
+.image_svm, .image_gasvm, .image_before_svm , .image_after_svm, .p24, .ps24{
+	width: 450px;
+	word-wrap: break-word;
+	/* border: 1px solid black; */
+}
+
+.ganjar, .anies, .prabowo{
+	width: 300px;
+	word-wrap: break-word;
+}
+
+.loc_sentiment, .loc_username{
+	width: 900px;
+	word-wrap: break-word;
 }

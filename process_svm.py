@@ -11,15 +11,14 @@ predict = []
 
 
 def svm(train_x_arr, test_x_arr, train_Y, test_X, test_Y):
-	model =  SVC(C=1, cache_size=300, class_weight=None, coef0=0.0,
-             decision_function_shape='ovr', degree=3, gamma=1, kernel='poly',
-             max_iter=197, probability=False, random_state=None, shrinking=True,
-              tol=0.001, verbose=False).fit(train_x_arr, train_Y)
+	model =  SVC(C=1, 
+             decision_function_shape='ovr', degree=1, gamma=0.8, kernel='sigmoid',
+             max_iter=150, probability=True).fit(train_x_arr, train_Y)
 
 	predictions_SVM_data = model.predict(test_x_arr)
 	test_prediction_data = pd.DataFrame()
-	test_prediction_data['text_clean'] = test_X
-	test_prediction_data['new_label'] = predictions_SVM_data
+	test_prediction_data['content'] = test_X
+	test_prediction_data['label'] = predictions_SVM_data
 	SVM_accuracy_data = accuracy_score(predictions_SVM_data, test_Y)*100
 	# print(test_prediction_data)
 	# SVM_accuracy_data

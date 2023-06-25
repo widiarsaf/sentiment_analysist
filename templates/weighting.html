@@ -31,7 +31,7 @@
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
 							data-bs-toggle="dropdown" aria-expanded="false" id="simulation">
-							Simulation
+							GA-SVM Process
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<li><a class="dropdown-item" href="{{url_for('preprocessingPage')}}" id="preprocessing">Pre-Processing</a>
@@ -51,8 +51,8 @@
 	<div>
 	<div class="card-weighting">
 		<h3 class="title-data mt-3 mb-3">Split Datasets and Term Weighting</h3>
-		<p>Employing TF-IDF (Term Frequency-Inverse Document Frequency) techniques to calculate the significance of words (terms)
-		in both individual documents and the overall corpus.</p>
+		<p>Splitting dataset into data train and data test. Performing TF-IDF (Term Frequency-Inverse Document Frequency)
+		techniques to calculate the significance of words (terms) in both individual documents and the overall corpus.</p>
 	</div>
 	<div class="container">
 		<div class="row row-weighting">
@@ -60,7 +60,7 @@
 				<div class="">
 					<center>
 						<h4 class="my-3">Split Dataset</h4>
-						<p>Lorem Ipsum</p>
+						<p>Divide dataset into data train and data test</p>
 					</center>
 					<center>
 						<form action="{{url_for('splitData')}}" method="post">
@@ -92,7 +92,7 @@
 			<div class="col col-weighting">
 				<center>
 					<h4 class="my-3">Term Weighting using TF-IDF</h4>
-					<p>Lorem Ipsum</p>
+					<p>Calculate the significance of term being used in document</p>
 				</center>
 				<center>
 					<form action="{{url_for('weighting')}}" method="post">

@@ -1,7 +1,7 @@
 # Import Library
 from process_geneticAlgorithm import geneticAlgorithmProcess
 from process_svm import svmProcess
-from process_preprocessing import prepocessingText, preprocessingLocation
+from process_preprocessing import prepocessingText, preprocessingLocation, preprocessingSentiment
 from process_weighting import splitDataset, tf_idf
 
 from sklearn.model_selection import GridSearchCV
@@ -76,7 +76,7 @@ model = pickle.load(open("model.pkl", "rb"))
 # Dataset
 dataset = pd.read_csv("data_sentiment.csv")
 datasets = dataset[['datetime', 'username', 'content', 'location', 'label']]
-election_sentiment = pd.read_csv("sentiment_clean3.csv")
+election_sentiment = pd.read_csv("data_sentiment_clean.csv")
 
 # Image Folder
 imageFolder = os.path.join('static', 'images')
@@ -93,30 +93,6 @@ def home():
 @app.route('/datasetPage')
 def datasetPage():
     return render_template('data.html', tables=[datasets.to_html()], titles=[''])
-
-
-@app.route('/chart')
-def chart():
-    data_train = pd.read_csv("df_train.csv")
-    data_test = pd.read_csv("df_test.csv")
-
-    labels = ['Positive', 'Neutral', 'Negative']
-
-    pos_train = len(data_train[data_train["labels"] == "positive"])
-    neu_train = len(data_train[data_train["labels"] == "neutral"])
-    neg_train = len(data_train[data_train["labels"] == "negative"])
-
-    category_train = [pos_train, neu_train, neg_train]
-
-    labels_json = json.dumps(labels)
-    category_json = json.dumps(category_train)
-
-    data_train_all = [labels_json, category_json]
-    data_train_json = json.dumps(data_train_all)
-    # print(data_train_all)
-
-    return render_template('chart.html', data_train_all=data_train_json)
-
 
 @app.route('/preprocessingPage')
 def preprocessingPage():
@@ -141,7 +117,8 @@ def gaPage():
 # Methods
 @app.route('/predict', methods=["POST"])
 def predict():
-    data = request.form["sentiment"]
+    text = request.form["sentiment"]
+    data = preprocessingSentiment(text)
     input_data = [data]
     tfidf_vect_data2 = TfidfVectorizer(analyzer='word', binary=False, decode_error='strict', encoding='utf-8',
                                        lowercase=True, max_df=1.0, max_features=30000, min_df=5,
@@ -154,12 +131,12 @@ def predict():
     new_test_x2 = vectorized_input.toarray()
     prediction = model.predict(new_test_x2)
     predict_proba = model.predict_proba(new_test_x2)
-    positive = predict_proba[0][2]
-    neutral = predict_proba[0][1]
-    negative = predict_proba[0][0]
+    positive = round(predict_proba[0][2],3)
+    neutral = round(predict_proba[0][1],3)
+    negative = round(predict_proba[0][0],3)
     predict_text = ''
     images = "no_pict"
-    data2 = request.form.get('sentiment')
+    data2 = request.form["sentiment"]
 
     if prediction == ['positive']:
         predict_text = "Positive"
@@ -238,52 +215,88 @@ def weighting():
 
 @app.route('/svm_process', methods=["POST"])
 def svm_process():
-    warnings.filterwarnings('ignore')
-    accuracy, classification_report, summarized_report, confusion_matrix_report = svmProcess(
-        train_x_arr, test_x_arr, train_Y, test_X, test_Y)
+    if train_Y != []:
+        warnings.filterwarnings('ignore')
+        accuracy, classification_report, summarized_report, confusion_matrix_report = svmProcess(
+            train_x_arr, test_x_arr, train_Y, test_X, test_Y)
 
-    # Plot the confusion matrix.
-    img = BytesIO()
-    sns.heatmap(confusion_matrix_report, annot=True)
-    plt.ylabel('Prediction', fontsize=13)
-    plt.xlabel('Actual', fontsize=13)
-    plt.title('Confusion Matrix', fontsize=17)
-    plt.savefig(img, format='png')
-    plt.close()
-    img.seek(0)
-    plot_url = base64.b64encode(img.getvalue()).decode('utf8')
-    return render_template('svm.html', accuracy=accuracy, summarized_reports=[summarized_report.to_html()], titles=[''], images=plot_url)
+        # Plot the confusion matrix.
+        img = BytesIO()
+        sns.heatmap(confusion_matrix_report, annot=True)
+        plt.ylabel('Prediction', fontsize=13)
+        plt.xlabel('Actual', fontsize=13)
+        plt.title('Confusion Matrix', fontsize=17)
+        plt.savefig(img, format='png')
+        plt.close()
+        img.seek(0)
+        plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+        return render_template('svm.html', accuracy=accuracy, summarized_reports=[summarized_report.to_html()], titles=[''], images=plot_url)
+    else:
+        return render_template('weighting.html')
 
 
 @app.route('/geneticAlgorithm', methods=["POST"])
 def geneticAlgorithm():
-    warnings.filterwarnings('ignore')
+    if train_Y != []:
 
-    #get data
-    population = int(request.form["population"])
-    crossover = float(request.form["crossover"])
-    mutation = float(request.form["mutation"])
-    generation = int(request.form["generation"])
-    log, best_param, plot_ga = geneticAlgorithmProcess(
-        train_x_arr, test_x_arr, train_Y, test_Y, population, crossover,mutation,generation)
-    log_df = pd.DataFrame(log)
-   
-    c = best_param[0]
-    kernel = best_param[1]
-    degree = best_param[2]
-    gamma = best_param[3]
-    coef0 = best_param[4]
-    max_iter = best_param[5]
+        warnings.filterwarnings('ignore')
+
+        #get data
+        population = int(request.form["population"])
+        crossover = float(request.form["crossover"])
+        mutation = float(request.form["mutation"])
+        generation = int(request.form["generation"])
+        log, best_param, plot_ga = geneticAlgorithmProcess(
+            train_x_arr, test_x_arr, train_Y, test_Y, population, crossover,mutation,generation)
+        log_df = pd.DataFrame(log)
     
-    #Plot
-    img = BytesIO()
-    plot_ga
-    plt.savefig(img, format='png')
-    plt.close()
-    img.seek(0)
-    plot_ga= base64.b64encode(img.getvalue()).decode('utf8')
-    return render_template('ga.html', done="Ok!", logs=[log_df.to_html()], titles=[''], best_param=best_param, 
-                           images=plot_ga, c=c, kernel=kernel, degree=degree, gamma=gamma, coef0=coef0, max_iter=max_iter)
+        c = best_param[0]
+        kernel = best_param[1]
+        degree = best_param[2]
+        gamma = best_param[3]
+        max_iter = best_param[4]
+        
+        #Plot
+        img = BytesIO()
+        plot_ga
+        plt.savefig(img, format='png')
+        plt.close()
+        img.seek(0)
+        plot_ga= base64.b64encode(img.getvalue()).decode('utf8')
+        return render_template('ga.html', done="Ok!", logs=[log_df.to_html()], titles=[''], best_param=best_param, 
+                            images=plot_ga, c=c, kernel=kernel, degree=degree, gamma=gamma, max_iter=max_iter)
+    
+    else:
+        return render_template('weighting.html')
+
+
+
+
+@app.route('/chart')
+def chart():
+    svm= os.path.join(app.config['UPLOAD_FOLDER'], 'SVM.jpg')
+    ga_svm = os.path.join(app.config['UPLOAD_FOLDER'], 'GA-SVM.jpg')
+    before_svm = os.path.join(app.config['UPLOAD_FOLDER'], 'before_svm.jpg')
+    after_svm = os.path.join(app.config['UPLOAD_FOLDER'], 'after_svm.jpg')
+
+    pemilu24 = os.path.join(
+        app.config['UPLOAD_FOLDER'], 'Pemilu2024_pie.jpg')
+    pemiluserentak24 = os.path.join(app.config['UPLOAD_FOLDER'],
+                           'PemiluSerentak2024_pie.jpg')
+    ganjar = os.path.join(
+        app.config['UPLOAD_FOLDER'], '@ganjarpranowo_pie.jpg')
+    anies = os.path.join(app.config['UPLOAD_FOLDER'], '@aniesbaswedan_pie.jpg')
+    prabowo = os.path.join(app.config['UPLOAD_FOLDER'], '@prabowo_pie.jpg')
+
+    loc_sentiment = os.path.join(app.config['UPLOAD_FOLDER'], 'loc_class.jpg')
+    loc_username = os.path.join(
+        app.config['UPLOAD_FOLDER'], 'loc_username.jpg')
+
+    return render_template('chart.html', svm=svm, ga_svm= ga_svm, before_svm= before_svm, after_svm=after_svm, 
+                           pemilu24=pemilu24, pemiluserentak24=pemiluserentak24,
+                           ganjar = ganjar, anies = anies, prabowo=prabowo,
+                           loc_sentiment = loc_sentiment, loc_username = loc_username
+                           )
 
 
 if __name__ == "__main__":

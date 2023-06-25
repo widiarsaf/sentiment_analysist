@@ -16,7 +16,6 @@ min_c, max_c = 0.0, 1.0
 kernels = ['rbf', 'poly', 'sigmoid', 'linear']
 min_degree, max_degree = 2, 5
 min_gamma, max_gamma = 0.0, 1.0
-min_coef0, max_coef0 = 0.0, 1.0
 min_iteration, max_iteration = 100, 400
 
 
@@ -40,13 +39,10 @@ def mutate(individual):
         individual[2] = random.randint(min_degree, max_degree)
 
     if gene == 3:
-        individual[4] = random.uniform(min_gamma, max_gamma)
+        individual[3] = random.uniform(min_gamma, max_gamma)
 
-    if gene == 4:
-        individual[4] = random.uniform(min_coef0, max_coef0)
-
-    elif gene == 5:
-        individual[5] = random.randint(min_iteration, max_iteration)
+    elif gene == 4:
+        individual[4] = random.randint(min_iteration, max_iteration)
 
     return individual,
 
@@ -61,15 +57,14 @@ def evaluate(individual):
     kernel_ = individual[1]
     degree_ = individual[2]
     gamma_ = individual[3]
-    coef0_ = individual[4]
-    iteration_ = individual[5]
+    iteration_ = individual[4]
 
     # build the model
     model_svm = SVC(C=c_,
-                    coef0=coef0_,
                     degree=degree_,
                     gamma=gamma_, kernel=kernel_,
                     max_iter=iteration_,
+                    coef0 = 0.0,
                     probability=True
                     ).fit(train_x_arr, train_Y)
     predict = model_svm.predict(test_x_arr)
@@ -92,13 +87,12 @@ def GA(population, crossover, mutation, generation):
   toolbox.register("attr_kernel", random.choice, kernels)
   toolbox.register("attr_degree", random.randint, min_degree, max_degree)
   toolbox.register("attr_gamma", random.uniform, min_gamma, max_gamma)
-  toolbox.register("attr_coef0", random.uniform, min_coef0, max_coef0)
   toolbox.register("attr_iteration", random.randint,
                    min_iteration, max_iteration)
 
   toolbox.register("individual", tools.initCycle, creator.Individual,
                    (toolbox.attr_c, toolbox.attr_kernel, toolbox.attr_degree,
-                    toolbox.attr_gamma, toolbox.attr_coef0, toolbox.attr_iteration), n=N_CYCLES)
+                    toolbox.attr_gamma, toolbox.attr_iteration), n=N_CYCLES)
   toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
   toolbox.register("mate", tools.cxOnePoint)
