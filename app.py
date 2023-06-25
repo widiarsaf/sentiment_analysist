@@ -1,3 +1,32 @@
+
+from sklearn.metrics import confusion_matrix
+from sklearn import svm
+from sklearn.metrics import accuracy_score
+from wordcloud import WordCloud
+from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+import nltk
+import string
+import re
+from deap import base
+from deap import creator
+from deap import tools
+from deap import algorithms
+import sklearn.metrics as metrics
+import warnings
+import random
+from sklearn.svm import SVC
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+warnings.filterwarnings('ignore')
+from sklearn.model_selection import train_test_split
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+import numpy as np
+
 # Import Library
 from process_geneticAlgorithm import geneticAlgorithmProcess
 from process_svm import svmProcess
@@ -161,25 +190,15 @@ def preprocessing():
     datasets['locations'] = preprocessingLocation(datasets['location'])
     datasets['sentiment'] = prepocessingText(datasets['content'])
     datasets['labels'] = datasets['label']
-    datasets.to_csv("data_sentiment_clean.csv", mode='w', index=False)
+    datasets.to_csv("data_sentiment_clean2.csv", mode='w', index=False)
 
     sentiment_clean = pd.read_csv("data_sentiment_clean.csv")
-    sentiment_clean[['datetime', 'username', 'content',
-                     'location', 'label', 'sentiment', 'locations', 'labels']]
+    sentiment_clean[['datetime',
+                     'locations', 'sentiment', 'labels']]
 
     # show_data = np.array([datasets['content'],sentiment_clean['sentiment']])
     show_data_df = pd.DataFrame(
         [datasets['content'], sentiment_clean['sentiment']], index=['Before Preprocessing', 'After Preprocessing']).T
-
-    # drop column
-    datasets.drop(['sentiment'], axis=1, inplace=True)
-    datasets.drop(['locations'], axis=1, inplace=True)
-    datasets.drop(['labels'], axis=1, inplace=True)
-    sentiment_clean.drop(['username'], axis=1, inplace=True)
-    sentiment_clean.drop(['content'], axis=1, inplace=True)
-    sentiment_clean.drop(['location'], axis=1, inplace=True)
-    sentiment_clean.drop(['label'], axis=1, inplace=True)
-    sentiment_clean.to_csv("data_sentiment_clean.csv", mode='w', index=False)
 
     return render_template('pre-processing.html', tables=[show_data_df.to_html()], titles=[''], done="OK!")
 
