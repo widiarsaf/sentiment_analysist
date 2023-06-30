@@ -1,37 +1,9 @@
-
-from sklearn.metrics import confusion_matrix
-from sklearn import svm
-from sklearn.metrics import accuracy_score
-from wordcloud import WordCloud
-from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
-from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-import nltk
-import string
-import re
-from deap import base
-from deap import creator
-from deap import tools
-from deap import algorithms
-import sklearn.metrics as metrics
-import warnings
-import random
-from sklearn.svm import SVC
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-warnings.filterwarnings('ignore')
-from sklearn.model_selection import train_test_split
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-import numpy as np
-
 # Import Library
 from process_geneticAlgorithm import geneticAlgorithmProcess
 from process_svm import svmProcess
 from process_preprocessing import prepocessingText, preprocessingLocation, preprocessingSentiment
 from process_weighting import splitDataset, tf_idf
+from process_scrapping import scrapping
 
 from sklearn.model_selection import GridSearchCV
 from wordcloud import WordCloud
@@ -68,6 +40,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from io import BytesIO
 import base64
 import matplotlib
+from sklearn.svm import SVC
 matplotlib.use('Agg')
 
 
@@ -93,6 +66,7 @@ train_Y = []
 test_Y = []
 train_x_arr = []
 test_x_arr = []
+data_scrapped = []
 
 
 # App
@@ -141,6 +115,10 @@ def svmPage():
 @app.route('/gaPage')
 def gaPage():
     return render_template('ga.html')
+
+@app.route('/implementationPage')
+def implementationPage():
+    return render_template('implementation.html')
 
 
 # Methods
@@ -317,6 +295,48 @@ def chart():
                            loc_sentiment = loc_sentiment, loc_username = loc_username
                            )
 
+@app.route('/scrapping_process', methods=["POST"])
+def scrapping_process():
+    
+    
+    global data_scrapped
+    keyword = request.form["keyword"]
+    total = int(request.form["total"])
+    print(keyword, total)
+    data = scrapping(keyword, total)
+    data_scrapped = data
+    data_scrapped['sentiment'] = prepocessingText(data_scrapped['content'])
+    print(data)
+
+    df_all = pd.DataFrame()
+    df_all['sentiment'] = data_scrapped['sentiment']
+    df_all_sentiment = df_all['sentiment']
+
+    tfidf_vect_data = TfidfVectorizer(analyzer='word', binary=False, decode_error='strict', encoding='utf-8',
+        lowercase=True,  max_df=1.0, max_features=30000, min_df=5,
+        ngram_range=(1, 1), norm='l2',
+       strip_accents='unicode', sublinear_tf=False,
+        token_pattern='\\w{1,}', tokenizer=None, use_idf=True,
+        vocabulary=None)
+    
+    tfidf_vect_data.fit(election_sentiment['sentiment'])
+    all_data = tfidf_vect_data.transform(df_all_sentiment)
+    all_data_array = all_data.toarray()
+
+    predictions_SVM_data2 = model.predict(all_data_array)
+    test_prediction_data2 = pd.DataFrame()
+    test_prediction_data2['sentiment'] = df_all_sentiment
+    test_prediction_data2['new_label'] = predictions_SVM_data2
+
+    data_scrapped['label'] = test_prediction_data2['new_label']
+
+    print(test_prediction_data2)
+    return render_template('implementation.html', datas=[data.to_html()], titles=[''])
+
+@app.route('/classify', methods=["POST"])
+def classify():
+    
+    return render_template('implementation.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
