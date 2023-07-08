@@ -177,3 +177,9 @@ background-color: rgb(233, 255, 201);
 	width: 900px;
 	word-wrap: break-word;
 }
+.card-implementation{
+	text-align: center;
+	align-items: center;
+}
+.image_plot_implementation{
+}

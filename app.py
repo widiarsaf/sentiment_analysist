@@ -3,7 +3,11 @@ from process_geneticAlgorithm import geneticAlgorithmProcess
 from process_svm import svmProcess
 from process_preprocessing import prepocessingText, preprocessingLocation, preprocessingSentiment
 from process_weighting import splitDataset, tf_idf
-from process_scrapping import scrapping
+from process_generate_data import generate_random_data
+from process_uniforming_location import create_new_location
+
+from process_generate_plot import generatePlot_all
+
 
 from sklearn.model_selection import GridSearchCV
 from wordcloud import WordCloud
@@ -303,11 +307,15 @@ def scrapping_process():
     keyword = request.form["keyword"]
     total = int(request.form["total"])
     print(keyword, total)
-    data = scrapping(keyword, total)
+    
+    
+    data = generate_random_data(keyword, total)
     data_scrapped = data
+    data_scrapped['province'] = data_scrapped.apply(create_new_location, axis=1)
     data_scrapped['sentiment'] = prepocessingText(data_scrapped['content'])
-    print(data)
+    print(data_scrapped['location'].str.lower())
 
+    #TF-IDF
     df_all = pd.DataFrame()
     df_all['sentiment'] = data_scrapped['sentiment']
     df_all_sentiment = df_all['sentiment']
@@ -323,6 +331,7 @@ def scrapping_process():
     all_data = tfidf_vect_data.transform(df_all_sentiment)
     all_data_array = all_data.toarray()
 
+    #SVM
     predictions_SVM_data2 = model.predict(all_data_array)
     test_prediction_data2 = pd.DataFrame()
     test_prediction_data2['sentiment'] = df_all_sentiment
@@ -331,7 +340,21 @@ def scrapping_process():
     data_scrapped['label'] = test_prediction_data2['new_label']
 
     print(test_prediction_data2)
-    return render_template('implementation.html', datas=[data.to_html()], titles=[''])
+
+    #plot_jawa
+    get_plot_all= generatePlot_all(data_scrapped)
+    img_all= BytesIO()
+    get_plot_all
+    plt.savefig(img_all , format='png')
+    plt.close()
+    img_all.seek(0)
+    plot_all= base64.b64encode(img_all.getvalue()).decode('utf8')
+
+    data_scrapped = data_scrapped.drop("location", axis=1)
+    data_scrapped = data_scrapped.drop("sentiment", axis=1)
+
+    return render_template('implementation.html', datas=[data_scrapped.to_html()], titles=[''], 
+                           plot_all = plot_all, keyword = keyword)
 
 @app.route('/classify', methods=["POST"])
 def classify():
